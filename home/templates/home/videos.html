@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <div class="w-75">
+        {% for video in videos %}
+            <input type="text" placeholder="Link" name="link" class="form-control " value="{{ video.title }}">
+
+        {% endfor %}
+    </div>
+{% endblock content %}

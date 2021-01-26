@@ -1,3 +1,31 @@
 h1{
-    color: blue;
+    color: white;
+}
+
+#input #link{
+    border:none;
+    border-radius: 0;
+    width: 80%;
+
+}
+
+#input #btnright{
+    border-radius: 0 1rem 1rem 0;
+    width: 10%;
+}
+
+#input #btnleft{
+    border-radius: 1rem 0 0 1rem;
+    width: 10%;
+}
+
+#input #spinner1{
+    justify-content: center;
+    width: 10%;
+    display: none;
+}
+#input #spinner2{
+    justify-content: center;
+    width: 10%;
+    display: none;
 }

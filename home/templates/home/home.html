@@ -6,8 +6,25 @@
 {% endblock styles %}
 
 {% block content %}
+    <div class="d-block p-2 w-75">
+        <h1>Youtube converter</h1>
 
-    <h1>S'appening {{id}}</h1>
-    <a class="btn btn-dark" href="{%  static 'Untitled.zip' %}" download>asd</a>
-    <a href="{% url 'home-hello' %}">da</a>
+        <form class="d-flex" id="input" method="POST">
+            {% csrf_token %}
+            <button name="video" class="btn btn-primary" id="btnleft" onclick=sendLink()>Video</button>
+            <div id="spinner1">
+                <div class="spinner-border text-light" ></div>
+            </div>
+            <input type="text" placeholder="Link" name="link" class="form-control " id="link">
+            <div id="spinner2">
+                <div class="spinner-border text-light" ></div>
+            </div>
+            <button name="playlist" class="btn btn-primary"  id="btnright" onclick=sendLink()>Playlist</button>
+        </form>
+    </div>
 {% endblock content %}
+
+{% block scripts %}
+    {% csrf_token %}
+    <script src="{% static 'home/home.js' %}"></script>
+{% endblock scripts %}
