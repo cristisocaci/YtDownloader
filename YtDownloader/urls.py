@@ -19,6 +19,6 @@ import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', include('home.url'))
+    path('', include('home.url'))
 
 ]
