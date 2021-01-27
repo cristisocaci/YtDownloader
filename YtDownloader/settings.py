@@ -14,8 +14,6 @@ from pathlib import Path
 import mimetypes
 import django_heroku
 
-django_heroku.settings(locals())
-mimetypes.add_type("text/css", ".css", True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -137,3 +135,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
+django_heroku.settings(locals())
+mimetypes.add_type("text/css", ".css", True)
