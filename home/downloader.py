@@ -24,7 +24,7 @@ class Video:
         self.stream = None
         self.path_video = None
         self.path_audio = None
-        self.current_directory = pathlib.Path().absolute().__str__() + '/'
+        self.current_directory = pathlib.Path().absolute().__str__()
         self.failed = False
 
         if not self.unavailable:
@@ -46,11 +46,11 @@ class Video:
     def download_video(self, path=None):
         self.stream = self.video.streams.filter(only_audio=True).first()
         self.path_video = self.stream.download(
-            output_path=self.current_directory + path,
+            output_path=os.path.join(self.current_directory, path),
             filename=self.title)
 
     def convert_to_audio(self, path):
-        self.path_audio = self.current_directory + path + self.title + '.mp3'
+        self.path_audio = os.path.join(self.current_directory, path, self.title + '.mp3')
         new_file = mp.AudioFileClip(self.path_video)
         new_file.write_audiofile(self.path_audio)
         os.remove(self.path_video)
@@ -84,7 +84,7 @@ class Downloader:
         self.is_playlist = None
         self.playlist = None
         self.videos = None
-        self.current_directory = pathlib.Path().absolute().__str__() + '/'
+        self.current_directory = pathlib.Path().absolute().__str__()
 
     def fetch(self, link, is_playlist=False):
         self.link = link
@@ -101,10 +101,10 @@ class Downloader:
     def download(self, path):
         folder = self.randstring()
         for video in self.videos:
-            video.download_audio(path+folder+'/')
+            video.download_audio(os.path.join(path,folder))
             if video.failed:
                 print('failed ' + video.link)
-        shutil.make_archive(base_name=self.current_directory+path+folder, format='zip', root_dir=self.current_directory+path, base_dir=folder)
+        shutil.make_archive(base_name=os.path.join(self.current_directory,path,folder), format='zip', root_dir=os.path.join(self.current_directory, path), base_dir=folder)
         return folder+'.zip'
 
     def randstring(self, length=8):

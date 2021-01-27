@@ -125,4 +125,4 @@ dmypy.json
 .pyre/
 static/Untitled.png
 static/Untitled.zip
-home/static/home/music/*
+static/music/*

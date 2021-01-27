@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
@@ -57,5 +59,5 @@ def download(request):
                 downloader.videos[i].artist = artists[j]
                 downloader.videos[i].album = albums[j]
                 j += 1
-        zipfile = downloader.download('static/music/')
+        zipfile = downloader.download(os.path.join('static', 'music'))
         return render(request, 'home/downloaded.html', {'videos': downloader.videos, 'file': "music/"+zipfile})

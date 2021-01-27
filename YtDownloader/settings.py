@@ -28,7 +28,7 @@ SECRET_KEY = 'v1fb4g$ptlb7%ipftd&b+7^t_-7^h#9z4^h@s9-w=q*cau@#3x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['yt-c.herokuapp.com']
+ALLOWED_HOSTS = ['yt-c.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -52,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'YtDownloader.urls'
