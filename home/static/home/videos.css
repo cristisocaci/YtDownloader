@@ -7,3 +7,8 @@ label{
     display: none;
 }
 
+
+.textinput{
+    background-color: #343a40;
+    color: lightgrey;
+}

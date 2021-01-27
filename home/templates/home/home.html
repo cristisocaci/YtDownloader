@@ -18,15 +18,15 @@
 
         <form class="d-flex" id="input" method="POST">
             {% csrf_token %}
-            <button name="video" class="btn btn-secondary" id="btnleft" onclick=sendLink()>Video</button>
+            <button name="video" class="btn btn-secondary" id="btnleft" onclick=sendLink('left')>Video</button>
             <div id="spinner1">
-                <div class="spinner-border text-light" ></div>
+                <div class="spinner-border text-light" id="spinnerleft"></div>
             </div>
-            <input type="text" placeholder="Link" name="link" class="form-control " id="link">
+            <input type="text" placeholder="Link" name="link" class="form-control bg-dark text-light" id="link">
             <div id="spinner2">
-                <div class="spinner-border text-light" ></div>
+                <div class="spinner-border text-light" id="spinnerright"></div>
             </div>
-            <button name="playlist" class="btn btn-secondary pl-1"  id="btnright" onclick=sendLink()>Playlist</button>
+            <button name="playlist" class="btn btn-secondary pl-1"  id="btnright" onclick=sendLink('right')>Playlist</button>
         </form>
     </div>
 {% endblock content %}
