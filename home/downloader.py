@@ -1,9 +1,11 @@
+import string
+import random
 from pytube import YouTube, Playlist
 import pathlib
 import moviepy.editor as mp
 import os
 from mutagen.easyid3 import EasyID3
-
+import shutil
 
 class Video:
     def __init__(self, link):
@@ -15,10 +17,10 @@ class Video:
             print('Video init: ' + b.__str__())
             self.unavailable = True
 
-        self.artist = None
-        self.song = None
-        self.album = None
-        self.title = None
+        self.artist = ''
+        self.song = ''
+        self.album = ''
+        self.title = ''
         self.stream = None
         self.path_video = None
         self.path_audio = None
@@ -56,9 +58,9 @@ class Video:
     def add_metadata(self):
         if self.path_audio is not None:
             audio = EasyID3(self.path_audio)
-            audio['title'] = self.song if self.song is not None else ''
-            audio['artist'] = self.artist if self.artist is not None else ''
-            audio['album'] = self.album if self.album is not None else ''
+            audio['title'] = self.song
+            audio['artist'] = self.artist
+            audio['album'] = self.album
             audio.save()
 
     def download_audio(self, path):
@@ -82,6 +84,7 @@ class Downloader:
         self.is_playlist = None
         self.playlist = None
         self.videos = None
+        self.current_directory = pathlib.Path().absolute().__str__() + '\\'
 
     def fetch(self, link, is_playlist=False):
         self.link = link
@@ -96,7 +99,14 @@ class Downloader:
             self.videos = [Video(self.link)]
 
     def download(self, path):
+        folder = self.randstring()
         for video in self.videos:
-            video.download_audio(path)
+            video.download_audio(path+folder+'\\')
             if video.failed:
                 print('failed ' + video.link)
+        shutil.make_archive(base_name=self.current_directory+path+folder, format='zip', root_dir=self.current_directory+path, base_dir=folder)
+        return folder+'.zip'
+
+    def randstring(self, length=8):
+        letters = string.ascii_letters
+        return ''.join(random.choice(letters) for i in range(length))

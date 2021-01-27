@@ -1,12 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
+{% block styles %}
+     <link rel="stylesheet" type="text/css" href="{% static 'home/videos.css' %}">
+{% endblock styles %}
 
 {% block content %}
     <div class="w-75">
-        {% for video in videos %}
-            <input type="text" placeholder="Link" name="link" class="form-control " value="{{ video.title }}">
-
-        {% endfor %}
+        <form method="POST" action="{% url 'home-download' %} ">
+            {% csrf_token %}
+            {% for form in forms %}
+                {% if form.metadata.unavailable %}
+                    <div class="alert alert-danger">Video unavailable: <a href="{{ form.metadata.link }}">{{ form.metadata.link }}</a>
+                    </div>
+                {% else %}
+                    {{ form.form|crispy }}
+                {% endif %}
+            {% endfor %}
+        <input type="hidden" id="link" name="link" value="{{ link }}">
+        <input type="hidden" id="playlist" name="playlist" value="{{ playlist }}">
+        <input type="submit" class="btn btn-success" value="Save">
+        </form>
     </div>
 {% endblock content %}
