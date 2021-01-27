@@ -5,27 +5,60 @@ h1{
 #input #link{
     border:none;
     border-radius: 0;
-    width: 80%;
+    width: 60%;
 
 }
 
 #input #btnright{
     border-radius: 0 1rem 1rem 0;
-    width: 10%;
+    width: 20%;
 }
 
 #input #btnleft{
     border-radius: 1rem 0 0 1rem;
-    width: 10%;
+    width: 20%;
 }
 
 #input #spinner1{
     justify-content: center;
-    width: 10%;
+    width: 20%;
     display: none;
 }
 #input #spinner2{
     justify-content: center;
-    width: 10%;
+    width: 20%;
     display: none;
+}
+
+@media only screen and (max-width: 500px) {
+    #input #btnright {
+        font-size: small;
+    }
+
+    #input #btnleft {
+        font-size: small;
+    }
+
+}
+
+@media only screen and (max-width: 400px) {
+    #input #btnright {
+        font-size: x-small;
+    }
+
+    #input #btnleft {
+        font-size: x-small;
+    }
+
+}
+
+@media only screen and (max-width: 340px) {
+    #input #btnright {
+        font-size: xx-small;
+    }
+
+    #input #btnleft {
+        font-size: xx-small;
+    }
+
 }

@@ -8,10 +8,17 @@
 {% block content %}
     <div class="d-block p-2 w-75">
         <h1>Youtube converter</h1>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+
+        {% endif %}
+
 
         <form class="d-flex" id="input" method="POST">
             {% csrf_token %}
-            <button name="video" class="btn btn-primary" id="btnleft" onclick=sendLink()>Video</button>
+            <button name="video" class="btn btn-secondary" id="btnleft" onclick=sendLink()>Video</button>
             <div id="spinner1">
                 <div class="spinner-border text-light" ></div>
             </div>
@@ -19,7 +26,7 @@
             <div id="spinner2">
                 <div class="spinner-border text-light" ></div>
             </div>
-            <button name="playlist" class="btn btn-primary"  id="btnright" onclick=sendLink()>Playlist</button>
+            <button name="playlist" class="btn btn-secondary pl-1"  id="btnright" onclick=sendLink()>Playlist</button>
         </form>
     </div>
 {% endblock content %}

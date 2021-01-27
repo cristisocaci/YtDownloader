@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib import messages
 
 from .forms import VideoForm
 from .downloader import Downloader
@@ -11,7 +12,14 @@ def home(request):
         playlist = 'playlist' in request.POST
         link = request.POST['link']
         downloader = Downloader()
-        downloader.fetch(link, playlist)
+        try:
+            downloader.fetch(link, playlist)
+        except BaseException:
+            messages.add_message(request, messages.ERROR, 'Invalid link')
+            return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
+        if not playlist and downloader.videos[0].unavailable:
+            messages.add_message(request, messages.ERROR, 'Invalid link')
+            return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
 
         forms = []
         for video in downloader.videos:

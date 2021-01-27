@@ -2,12 +2,8 @@ label{
     color: white;
 }
 
-#spinner1{
+#spinner{
     justify-content: center;
     display: none;
 }
 
-#spinner2{
-    justify-content: center;
-    display: none;
-}
