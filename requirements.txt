@@ -5,3 +5,4 @@ pytube==10.4.1
 moviepy==1.0.3
 gunicorn==20.0.4
 whitenoise==5.2.0
+django-heroku==0.3.1
