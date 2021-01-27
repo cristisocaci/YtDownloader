@@ -41,7 +41,7 @@ class Video:
             pass
 
         self.title = self.video.title.replace('|', '')
-        self.title = self.video.title.replace('?', '')
+        self.title = self.title.replace('?', '')
 
     def download_video(self, path=None):
         self.stream = self.video.streams.filter(only_audio=True).first()

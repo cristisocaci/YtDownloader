@@ -32,7 +32,7 @@ def download(request):
     if request.method == 'POST':
         print(request.POST)
         link = request.POST['link']
-        playlist = request.POST['playlist']
+        playlist = True if request.POST['playlist'] == 'True' else False
         titles = request.POST.getlist('title')
         songs = request.POST.getlist('song')
         artists = request.POST.getlist('artist')

@@ -1,3 +1,13 @@
 label{
     color: white;
 }
+
+#spinner1{
+    justify-content: center;
+    display: none;
+}
+
+#spinner2{
+    justify-content: center;
+    display: none;
+}

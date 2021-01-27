@@ -12,15 +12,44 @@
             {% csrf_token %}
             {% for form in forms %}
                 {% if form.metadata.unavailable %}
-                    <div class="alert alert-danger">Video unavailable: <a href="{{ form.metadata.link }}">{{ form.metadata.link }}</a>
+                    <div class="alert alert-danger m-2">Video unavailable: <a href="{{ form.metadata.link }}">{{ form.metadata.link }}</a>
                     </div>
                 {% else %}
-                    {{ form.form|crispy }}
+                    <div class="border border-white rounded p-2 m-2">
+                        {{ form.form.title|as_crispy_field }}
+                        <div class="d-flex w-100 justify-content-end">
+                            <a class="btn btn-outline-info text-info" data-toggle="collapse"
+                                data-target="#collapse{{ forloop.counter }}">Edit info</a>
+                        </div>
+                        <div class="collapse" id="collapse{{ forloop.counter }}">
+                            {{ form.form.song|as_crispy_field }}
+                            {{ form.form.artist|as_crispy_field }}
+                            {{ form.form.album|as_crispy_field }}
+                        </div>
+                    </div>
                 {% endif %}
             {% endfor %}
         <input type="hidden" id="link" name="link" value="{{ link }}">
         <input type="hidden" id="playlist" name="playlist" value="{{ playlist }}">
-        <input type="submit" class="btn btn-success" value="Save">
+        <div class="p-2 d-flex w-100 justify-content-between">
+            <div>
+                <div id="spinner1">
+                    <div class="spinner-border text-light" ></div>
+                </div>
+                 <input type="submit" id="btnsubmit" class="btn btn-success" value="Save"  onclick=sendLink()>
+            </div>
+            <div>
+               <div id="spinner2">
+                    <div class="spinner-border text-light" ></div>
+                </div>
+                <a id="btnback" class="btn btn-secondary" style="justify-self: end" href="/">Back</a>
+            </div>
+        </div>
         </form>
     </div>
 {% endblock content %}
+
+{% block scripts %}
+    {% csrf_token %}
+    <script src="{% static 'home/videos.js' %}"></script>
+{% endblock scripts %}

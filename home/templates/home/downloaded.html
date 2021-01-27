@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block content %}
     <div class="w-75">
         {% for video in videos %}
             {% if video.unavailable %}
-                <div class="alert alert-danger">Video unavailable: <a
-                        href="{{ form.metadata.link }}">{{ form.metadata.link }}</a>
+                <div class="alert alert-danger">Video unavailable: <a href="{{ video.link }}">{{ video.link }}</a>
                 </div>
             {% elif video.failed %}
                 <div class="alert alert-danger">Failed to download: {{ video.title }}</div>
@@ -19,3 +17,4 @@
         <a class="btn btn-secondary" href="/">Home</a>
     </div>
 {% endblock content %}
+
