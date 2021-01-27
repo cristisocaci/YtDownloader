@@ -24,7 +24,7 @@ class Video:
         self.stream = None
         self.path_video = None
         self.path_audio = None
-        self.current_directory = pathlib.Path().absolute().__str__() + '\\'
+        self.current_directory = pathlib.Path().absolute().__str__() + '/'
         self.failed = False
 
         if not self.unavailable:
@@ -84,7 +84,7 @@ class Downloader:
         self.is_playlist = None
         self.playlist = None
         self.videos = None
-        self.current_directory = pathlib.Path().absolute().__str__() + '\\'
+        self.current_directory = pathlib.Path().absolute().__str__() + '/'
 
     def fetch(self, link, is_playlist=False):
         self.link = link
@@ -101,7 +101,7 @@ class Downloader:
     def download(self, path):
         folder = self.randstring()
         for video in self.videos:
-            video.download_audio(path+folder+'\\')
+            video.download_audio(path+folder+'/')
             if video.failed:
                 print('failed ' + video.link)
         shutil.make_archive(base_name=self.current_directory+path+folder, format='zip', root_dir=self.current_directory+path, base_dir=folder)

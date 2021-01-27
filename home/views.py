@@ -57,5 +57,5 @@ def download(request):
                 downloader.videos[i].artist = artists[j]
                 downloader.videos[i].album = albums[j]
                 j += 1
-        zipfile = downloader.download('staticfiles/music/')
+        zipfile = downloader.download('static/music/')
         return render(request, 'home/downloaded.html', {'videos': downloader.videos, 'file': "music/"+zipfile})
