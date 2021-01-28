@@ -104,7 +104,8 @@ class Downloader:
             video.download_audio(os.path.join(path,folder))
             if video.failed:
                 print('failed ' + video.link)
-        shutil.make_archive(base_name=os.path.join(self.current_directory,path,folder), format='zip', root_dir=os.path.join(self.current_directory, path), base_dir=folder)
+        shutil.make_archive(base_name=os.path.join(self.current_directory, path, folder), format='zip', root_dir=os.path.join(self.current_directory, path), base_dir=folder)
+        shutil.rmtree(os.path.join(self.current_directory, path, folder))
         return folder+'.zip'
 
     def randstring(self, length=8):

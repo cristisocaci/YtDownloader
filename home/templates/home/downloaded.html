@@ -13,8 +13,10 @@
                 <div class="alert alert-success">{{ video.title }}</div>
             {% endif %}
         {% endfor %}
-        <a class="btn btn-success" href="{% static file %}" download>Download</a>
-        <a class="btn btn-secondary" href="/">Home</a>
+        <div class="pb-4">
+            <a class="btn btn-success" href="{% static file %}" download>Download</a>
+            <a class="btn btn-secondary" href="/">Home</a>
+        </div>
     </div>
 {% endblock content %}
 
