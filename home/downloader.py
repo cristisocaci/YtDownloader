@@ -6,6 +6,7 @@ import moviepy.editor as mp
 import os
 from mutagen.easyid3 import EasyID3
 import shutil
+import pickle
 
 class Video:
     def __init__(self, link):
@@ -111,3 +112,6 @@ class Downloader:
     def randstring(self, length=8):
         letters = string.ascii_letters
         return ''.join(random.choice(letters) for i in range(length))
+
+    def toBinary(self):
+        return pickle.dumps(self)

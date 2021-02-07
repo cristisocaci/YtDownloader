@@ -1,4 +1,5 @@
 import os
+import pickle
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -6,23 +7,28 @@ from django.contrib import messages
 
 from .forms import VideoForm
 from .downloader import Downloader
+from .models import Video
 
 
 def home(request):
     if request.method == 'POST':
         print(request.POST)
         playlist = 'playlist' in request.POST
-        link = request.POST['link']
         downloader = Downloader()
         try:
-            downloader.fetch(link, playlist)
+            downloader.fetch(request.POST['link'], playlist)
         except BaseException:
             messages.add_message(request, messages.ERROR, 'Invalid link')
             return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
+
         if not playlist and downloader.videos[0].unavailable:
             messages.add_message(request, messages.ERROR, 'Invalid link')
             return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
 
+        print(downloader)
+        identifier = downloader.randstring()
+        record = Video(identifier=identifier, downloader=downloader.toBinary(), done=True)
+        record.save()
         forms = []
         for video in downloader.videos:
             initial = {'title': video.title,
@@ -34,22 +40,23 @@ def home(request):
                         'link': video.link
                         }
             forms += [{'form': VideoForm(initial=initial), 'metadata': metadata}]
-        return render(request, 'home/videos.html', {'forms': forms, 'link': link, 'playlist':playlist})
+        return render(request, 'home/videos.html', {'forms': forms,
+                                                    'identifier': identifier})
     return render(request, 'home/home.html')
 
 
 def download(request):
     if request.method == 'POST':
         print(request.POST)
-        link = request.POST['link']
-        playlist = True if request.POST['playlist'] == 'True' else False
+        identifier = request.POST['identifier']
         titles = request.POST.getlist('title')
         songs = request.POST.getlist('song')
         artists = request.POST.getlist('artist')
         albums = request.POST.getlist('album')
 
-        downloader = Downloader()
-        downloader.fetch(link, playlist)
+        record = Video.objects.get(identifier=identifier).downloader
+        downloader = pickle.loads(record)
+        print(downloader)
 
         j = 0
         for i in range(0, len(downloader.videos)):
