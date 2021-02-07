@@ -19,24 +19,25 @@ def home(request):
         identifier = downloader.randstring()
         Process(target=downloader.fetch, args=(request.POST['link'], identifier, playlist)).start()
 
-        '''
-        if not playlist and downloader.videos[0].unavailable:
-            messages.add_message(request, messages.ERROR, 'Invalid link')
-            return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
-        if downloader.getTotalLength() > 500*60:
-            messages.add_message(request, messages.ERROR, 'The videos are too lengthy')
-            return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
-        '''
-
         return render(request, 'home/videos.html', {'identifier': identifier})
-    return render(request, 'home/home.html')
+    return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
 
 
 def fetch_update(request):
     try:
         identifier = request.GET.get('identifier', '')
         record = Video.objects.get(identifier=identifier)
+        print(record.downloader is b'')
+        if record.done and record.downloader is b'':
+            messages.add_message(request, messages.ERROR, 'Invalid link')
+            return HttpResponse("home")
+
         downloader = pickle.loads(record.downloader)
+
+        if downloader.getTotalLength() > 500 * 60:
+            messages.add_message(request, messages.ERROR, 'The videos are too lengthy')
+            return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
+
         forms = []
         for video in downloader.videos:
             initial = {'title': video.title,
@@ -50,7 +51,8 @@ def fetch_update(request):
             forms += [{'form': VideoForm(initial=initial), 'metadata': metadata}]
 
         return render(request, 'home/form.html', {'forms': forms, 'done': record.done})
-    except Video.DoesNotExist:
+    except Video.DoesNotExist as ex:
+        print("fetch_update:", ex)
         return render(request, 'home/form.html', {'forms': [], 'done': False})
 
 

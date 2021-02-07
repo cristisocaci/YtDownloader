@@ -14,6 +14,9 @@ function update(){
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200){
+            if(this.responseText === 'home'){
+                window.location.replace('/')
+            }
             document.getElementById('base').innerHTML=this.responseText;
             let done = document.getElementById('done');
             if(done.value === 'True') {

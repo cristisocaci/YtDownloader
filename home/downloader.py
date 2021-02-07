@@ -121,8 +121,9 @@ class Downloader:
                 record.save()
 
         except BaseException as ex:
-            print(ex)
-            pass
+            record = VModel(identifier=identifier, done=True)
+            record.save()
+            print('FetchBaseEx:', ex)
 
     def download(self, path):
         folder = self.randstring()
