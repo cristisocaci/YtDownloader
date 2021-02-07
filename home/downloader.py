@@ -8,6 +8,12 @@ from mutagen.easyid3 import EasyID3
 import shutil
 import pickle
 
+
+import django
+django.setup()
+from .models import Video as VModel
+
+
 class Video:
     def __init__(self, link):
         self.link = link
@@ -87,17 +93,36 @@ class Downloader:
         self.videos = None
         self.current_directory = pathlib.Path().absolute().__str__()
 
-    def fetch(self, link, is_playlist=False):
-        self.link = link
-        self.is_playlist = is_playlist
-        if is_playlist:
-            self.playlist = Playlist(self.link)
-            self.videos = []
-            for v in self.playlist:
-                print(v)
-                self.videos += [Video(v)]
-        else:
-            self.videos = [Video(self.link)]
+    def fetch(self, link, identifier, is_playlist=False):
+        try:
+            self.link = link
+            self.is_playlist = is_playlist
+            if is_playlist:
+                self.playlist = Playlist(self.link)
+                self.videos = []
+                for v in self.playlist:
+                    print(v)
+                    self.videos += [Video(v)]
+                    try:
+                        record = VModel.objects.get(identifier=identifier)
+                        record.downloader = self.toBinary()
+                    except BaseException as b:
+                        print('Fetch',b)
+                        record = VModel(identifier=identifier, downloader=self.toBinary(), done=False)
+                    record.save()
+
+                record = VModel.objects.get(identifier=identifier)
+                record.done = True
+                record.save()
+
+            else:
+                self.videos = [Video(self.link)]
+                record = VModel(identifier=identifier, downloader=self.toBinary(), done=True)
+                record.save()
+
+        except BaseException as ex:
+            print(ex)
+            pass
 
     def download(self, path):
         folder = self.randstring()
@@ -115,3 +140,10 @@ class Downloader:
 
     def toBinary(self):
         return pickle.dumps(self)
+
+    def getTotalLength(self):
+        length = 0
+        for video in self.videos:
+            if not video.unavailable:
+                length += video.video.length
+        return length

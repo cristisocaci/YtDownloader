@@ -1,5 +1,6 @@
 import os
 import pickle
+from multiprocessing import Process
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -15,34 +16,42 @@ def home(request):
         print(request.POST)
         playlist = 'playlist' in request.POST
         downloader = Downloader()
-        try:
-            downloader.fetch(request.POST['link'], playlist)
-        except BaseException:
-            messages.add_message(request, messages.ERROR, 'Invalid link')
-            return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
+        identifier = downloader.randstring()
+        Process(target=downloader.fetch, args=(request.POST['link'], identifier, playlist)).start()
 
+        '''
         if not playlist and downloader.videos[0].unavailable:
             messages.add_message(request, messages.ERROR, 'Invalid link')
             return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
+        if downloader.getTotalLength() > 500*60:
+            messages.add_message(request, messages.ERROR, 'The videos are too lengthy')
+            return render(request, 'home/home.html', {'messages': messages.get_messages(request)})
+        '''
 
-        print(downloader)
-        identifier = downloader.randstring()
-        record = Video(identifier=identifier, downloader=downloader.toBinary(), done=True)
-        record.save()
+        return render(request, 'home/videos.html', {'identifier': identifier})
+    return render(request, 'home/home.html')
+
+
+def fetch_update(request):
+    try:
+        identifier = request.GET.get('identifier', '')
+        record = Video.objects.get(identifier=identifier)
+        downloader = pickle.loads(record.downloader)
         forms = []
         for video in downloader.videos:
             initial = {'title': video.title,
-                       'song': video.song,
-                       'artist': video.artist,
-                       'album': video.album,
-                       }
+                        'song': video.song,
+                        'artist': video.artist,
+                        'album': video.album,
+                        }
             metadata = {'unavailable': video.unavailable,
                         'link': video.link
                         }
             forms += [{'form': VideoForm(initial=initial), 'metadata': metadata}]
-        return render(request, 'home/videos.html', {'forms': forms,
-                                                    'identifier': identifier})
-    return render(request, 'home/home.html')
+
+        return render(request, 'home/form.html', {'forms': forms, 'done': record.done})
+    except Video.DoesNotExist:
+        return render(request, 'home/form.html', {'forms': [], 'done': False})
 
 
 def download(request):
@@ -56,7 +65,6 @@ def download(request):
 
         record = Video.objects.get(identifier=identifier).downloader
         downloader = pickle.loads(record)
-        print(downloader)
 
         j = 0
         for i in range(0, len(downloader.videos)):

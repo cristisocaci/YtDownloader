@@ -1,0 +1,41 @@
+{% load crispy_forms_tags %}
+<div class="p-2">
+    <div  class="progress sticky-top w-100 bg-dark" style="height: 0.2rem" id="animation">
+        <div class="progress-bar bg-info" id="progress"></div>
+    </div>
+</div>
+<form method="POST" action="{% url 'home-download' %} ">
+    {% csrf_token %}
+    {% for form in forms %}
+        {% if form.metadata.unavailable %}
+            <div class="alert alert-danger m-2">Video unavailable: <a
+                    href="{{ form.metadata.link }}">{{ form.metadata.link }}</a>
+            </div>
+        {% else %}
+            <div class="border border-white rounded p-2 m-2">
+                {{ form.form.title|as_crispy_field }}
+                <div class="d-flex w-100 justify-content-end">
+                    <a class="btn btn-outline-info text-info" data-toggle="collapse"
+                       data-target="#collapse{{ forloop.counter }}">Edit info</a>
+                </div>
+                <div class="collapse" id="collapse{{ forloop.counter }}">
+                    {{ form.form.song|as_crispy_field }}
+                    {{ form.form.artist|as_crispy_field }}
+                    {{ form.form.album|as_crispy_field }}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <input type="hidden" id="done" name="done" value="{{ done }}">
+
+    {% if done %}
+        <div class="m-2 pb-4 d-flex w-100 justify-content-start">
+            <div id="spinner">
+                <div class="spinner-border text-light"></div>
+            </div>
+            <input type="submit" id="btnsubmit" class="btn btn-success mr-2" value="Save" onclick=sendLink()>
+            <a id="btnback" class="btn btn-secondary" href="/">Back</a>
+        </div>
+    {% endif %}
+
+</form>

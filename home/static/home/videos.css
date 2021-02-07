@@ -12,3 +12,17 @@ label{
     background-color: #343a40;
     color: lightgrey;
 }
+
+#progress{
+    width:0;
+    height: 100%;
+    animation-name: update;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+
+}
+
+@keyframes update{
+    from {width: 0;}
+    to {width: 100%}
+}
