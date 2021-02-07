@@ -26,7 +26,7 @@ function update(){
              }
         }
     };
-    let identifier = document.getElementById("identifier").innerText;
+    let identifier = document.getElementById("identifierdiv").innerText;
     xhttp.open("GET", "/fetchupdate?identifier="+identifier, true);
     xhttp.send();
 }
