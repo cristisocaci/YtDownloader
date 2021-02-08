@@ -96,6 +96,8 @@ class Downloader:
 
     def fetch(self, link, identifier, is_playlist=False):
         try:
+            from django.db import connection
+            connection.close()
             self.link = link
             self.is_playlist = is_playlist
             if is_playlist:
@@ -127,6 +129,8 @@ class Downloader:
             print('FetchBaseEx:', ex)
 
     def download(self, path, folder):
+        from django.db import connection
+        connection.close()
         for video in self.videos:
             video.download_audio(os.path.join(path,folder))
             if video.failed:
