@@ -4,5 +4,6 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('download', views.download, name='home-download'),
-    path('fetchupdate', views.fetch_update, name='home-fetch-update')
+    path('fetchupdate', views.fetch_update, name='home-fetch-update'),
+    path('downloadupdate', views.download_update, name='home-download-update')
 ]

@@ -38,6 +38,5 @@ function stopAnimation() {
     }
 }
 var intervalId = setInterval(function () {
-    console.log("update")
     update();
 },2000);

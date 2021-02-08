@@ -1,0 +1,31 @@
+{% load static %}
+
+{% for video in videos %}
+    {% if video.unavailable %}
+        <div class="alert alert-danger">Video unavailable: <a href="{{ video.link }}">{{ video.link }}</a>
+        </div>
+    {% elif video.failed %}
+        <div class="alert alert-danger">Failed to download: {{ video.title }}</div>
+    {% elif video.done %}
+        <div class="alert alert-success">{{ video.title }}</div>
+    {% else %}
+        <div class="alert bg-secondary text-white d-flex justify-content-between align-items-center w-100">
+            {{ video.title }}
+            <div id="spinner">
+                <div class="spinner-border text-dark"></div>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+<div class="d-none" id="done">{{ done }}</div>
+{% if done %}
+    <div class="pb-4">
+        <a class="btn btn-success" href="{% static file %}" download>Download</a>
+        <a class="btn btn-secondary" href="/">Home</a>
+    </div>
+{% else %}
+    <div class="pb-4 invisible">
+        <a class="btn btn-success" href="{% static file %}" download>Download</a>
+        <a class="btn btn-secondary" href="/">Home</a>
+    </div>
+{% endif %}

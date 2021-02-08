@@ -65,8 +65,10 @@ def download(request):
         artists = request.POST.getlist('artist')
         albums = request.POST.getlist('album')
 
-        record = Video.objects.get(identifier=identifier).downloader
-        downloader = pickle.loads(record)
+        record = Video.objects.get(identifier=identifier)
+        record.done = False
+        record.save()
+        downloader = pickle.loads(record.downloader)
 
         j = 0
         for i in range(0, len(downloader.videos)):
@@ -76,5 +78,17 @@ def download(request):
                 downloader.videos[i].artist = artists[j]
                 downloader.videos[i].album = albums[j]
                 j += 1
-        zipfile = downloader.download(os.path.join('static', 'music'))
-        return render(request, 'home/downloaded.html', {'videos': downloader.videos, 'file': "music/"+zipfile})
+
+        Process(target=downloader.download, args=(os.path.join('static', 'music'), identifier)).start()
+
+        return render(request, 'home/downloaded.html', {'identifier': identifier})
+
+
+def download_update(request):
+    identifier = request.GET.get('identifier', '')
+    record = Video.objects.get(identifier=identifier)
+    downloader = pickle.loads(record.downloader)
+    zipfile = identifier + '.zip'
+    return render(request, 'home/downupdate.html', {'videos': downloader.videos,
+                                                    'done': record.done,
+                                                    'file': 'music/' + zipfile})

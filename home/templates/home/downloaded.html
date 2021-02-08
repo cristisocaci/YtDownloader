@@ -2,21 +2,13 @@
 {% load static %}
 
 {% block content %}
-    <div class="w-75">
-        {% for video in videos %}
-            {% if video.unavailable %}
-                <div class="alert alert-danger">Video unavailable: <a href="{{ video.link }}">{{ video.link }}</a>
-                </div>
-            {% elif video.failed %}
-                <div class="alert alert-danger">Failed to download: {{ video.title }}</div>
-            {% else %}
-                <div class="alert alert-success">{{ video.title }}</div>
-            {% endif %}
-        {% endfor %}
-        <div class="pb-4">
-            <a class="btn btn-success" href="{% static file %}" download>Download</a>
-            <a class="btn btn-secondary" href="/">Home</a>
-        </div>
+    <div class="w-75" id="base">
+
     </div>
+    <div class="d-none" id="identifierdiv">{{ identifier }}</div>
 {% endblock content %}
 
+{% block scripts %}
+    {% csrf_token %}
+    <script src="{% static 'home/downloaded.js' %}"></script>
+{% endblock scripts %}

@@ -33,6 +33,7 @@ class Video:
         self.path_audio = None
         self.current_directory = pathlib.Path().absolute().__str__()
         self.failed = False
+        self.done = False
 
         if not self.unavailable:
             self.assign_info()
@@ -125,15 +126,23 @@ class Downloader:
             record.save()
             print('FetchBaseEx:', ex)
 
-    def download(self, path):
-        folder = self.randstring()
+    def download(self, path, folder):
         for video in self.videos:
             video.download_audio(os.path.join(path,folder))
             if video.failed:
                 print('failed ' + video.link)
+            video.done = True
+            record = VModel.objects.get(identifier=folder)
+            record.downloader = self.toBinary()
+            record.save()
+
         shutil.make_archive(base_name=os.path.join(self.current_directory, path, folder), format='zip', root_dir=os.path.join(self.current_directory, path), base_dir=folder)
         shutil.rmtree(os.path.join(self.current_directory, path, folder))
-        return folder+'.zip'
+
+        record = VModel.objects.get(identifier=folder)
+        record.done = True
+        record.save()
+
 
     def randstring(self, length=8):
         letters = string.ascii_letters
