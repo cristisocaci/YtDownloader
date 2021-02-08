@@ -70,6 +70,7 @@ class Video:
             audio['album'] = self.album
             audio.save()
 
+
     def download_audio(self, path):
         try:
             self.download_video(path)
@@ -83,6 +84,9 @@ class Video:
         except ValueError as val:
             #print(val)
             pass
+        except BaseException as ex:
+            print("add_metadata: ", ex)
+            self.failed = True
 
 
 class Downloader:
