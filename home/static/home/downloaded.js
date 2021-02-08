@@ -18,4 +18,4 @@ function update(){
 
 var intervalId = setInterval(function () {
     update();
-},1000);
+},5000);

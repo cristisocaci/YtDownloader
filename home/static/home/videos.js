@@ -39,4 +39,4 @@ function stopAnimation() {
 }
 var intervalId = setInterval(function () {
     update();
-},2000);
+},6000);

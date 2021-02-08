@@ -8,7 +8,6 @@ from mutagen.easyid3 import EasyID3
 import shutil
 import pickle
 
-
 import django
 django.setup()
 from .models import Video as VModel
