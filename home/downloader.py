@@ -38,7 +38,7 @@ class Video:
             self.assign_info()
 
     def assign_info(self):
-        print(self.video.metadata)
+        print("assign_info: ", self.video.metadata)
         try:
             self.artist = self.video.metadata[0].get('Artist')
             self.song = self.video.metadata[0].get('Song')
@@ -107,7 +107,6 @@ class Downloader:
                 self.playlist = Playlist(self.link)
                 self.videos = []
                 for v in self.playlist:
-                    print(v)
                     self.videos += [Video(v)]
                     try:
                         record = VModel.objects.get(identifier=identifier)
@@ -137,7 +136,7 @@ class Downloader:
         for video in self.videos:
             video.download_audio(os.path.join(path,folder))
             if video.failed:
-                print('failed ' + video.link)
+                print('download failed ' + video.link)
             video.done = True
             record = VModel.objects.get(identifier=folder)
             record.downloader = self.toBinary()

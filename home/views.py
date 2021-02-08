@@ -13,7 +13,7 @@ from .models import Video
 
 def home(request):
     if request.method == 'POST':
-        print(request.POST)
+        print("home: ", request.POST)
         playlist = 'playlist' in request.POST
         downloader = Downloader()
         identifier = downloader.randstring()
@@ -58,7 +58,7 @@ def fetch_update(request):
 
 def download(request):
     if request.method == 'POST':
-        print(request.POST)
+        print("download: ",request.POST)
         identifier = request.POST['identifier']
         titles = request.POST.getlist('title')
         songs = request.POST.getlist('song')
